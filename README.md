@@ -1,7 +1,3 @@
-Absolutely, here's the README content in Markdown syntax:
-
----
-
 # Neovim Configuration
 
 This repository contains my Neovim configuration files. My setup uses Lua for configuration, with Lazy.nvim for managing plugins and Gruvbox as the theme.
