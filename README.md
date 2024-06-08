@@ -17,7 +17,7 @@ This repository contains my Neovim configuration files. My setup uses Lua for co
 
 ### Prerequisites
 
-- Neovim (v0.5.0 or later)
+- Neovim (v0.11 or later)
 - Git
 
 ### Steps
