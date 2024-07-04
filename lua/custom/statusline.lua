@@ -65,7 +65,7 @@ end
 
 -- Function to get the current Git branch
 local function branch()
-  if vim.bo.filetype == "oil" or vim.bo.filetype == "fugitive" then
+  if vim.bo.filetype == "oil" or vim.bo.filetype == "fugitive" or vim.bo.buftype == "terminal" then
     return ""
   end
   local Branch = require("plenary.job")
