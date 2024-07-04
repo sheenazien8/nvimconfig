@@ -5,7 +5,6 @@ return {
   { "wakatime/vim-wakatime", lazy = false },
   {
     "jwalton512/vim-blade",
-    -- enabled = false,
   },
   {
     "barrett-ruth/live-server.nvim",
@@ -18,4 +17,9 @@ return {
     "kristijanhusak/vim-dadbod-completion",
     "kristijanhusak/vim-dadbod-ui",
   },
+  "mattn/emmet-vim",
+  "adelarsq/vim-matchit",
+  config = function()
+    vim.cmd [[runtime macros/matchit.vim]]
+  end,
 }
