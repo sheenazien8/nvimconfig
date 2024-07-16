@@ -12,11 +12,11 @@ return {
     cmd = { "LiveServerStart", "LiveServerStop" },
     config = true,
   },
-  {
-    "tpope/vim-dadbod",
-    "kristijanhusak/vim-dadbod-completion",
-    "kristijanhusak/vim-dadbod-ui",
-  },
+  -- {
+  --   "tpope/vim-dadbod",
+  --   "kristijanhusak/vim-dadbod-completion",
+  --   "kristijanhusak/vim-dadbod-ui",
+  -- },
   "mattn/emmet-vim",
   "adelarsq/vim-matchit",
   config = function()

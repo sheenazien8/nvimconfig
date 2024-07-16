@@ -96,7 +96,3 @@ This configuration is licensed under the MIT License. See the [LICENSE](LICENSE)
 ---
 
 Feel free to adjust the Markdown formatting as needed for your repository.
-<<<<<<< HEAD
->>>>>>> 7d7111c12165f5a437d175ad7bf335a98aa9539f
-=======
->>>>>>> 7d7111c12165f5a437d175ad7bf335a98aa9539f
