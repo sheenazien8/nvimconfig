@@ -110,6 +110,7 @@ return {
       },
       filetype = "blade",
     }
+    -- vim.treesitter.language.register("html", "blade")
     -- require(plug.main).setup(opts)
   end,
 }

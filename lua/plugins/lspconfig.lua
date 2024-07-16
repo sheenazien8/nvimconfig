@@ -59,7 +59,7 @@ return { -- LSP Configuration & Plugins
     local servers = {
       intelephense = {
         cmd = { bin_name, "--stdio" },
-        filetypes = { "php" },
+        filetypes = { "php", "blade" },
         root_dir = function(pattern)
           local cwd = vim.loop.cwd()
           local root = util.root_pattern("composer.json", ".git")(pattern)
