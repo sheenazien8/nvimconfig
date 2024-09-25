@@ -8,10 +8,16 @@ return {
     "V13Axel/neotest-pest",
     "olimorris/neotest-phpunit",
     "nvim-neotest/neotest-jest",
+    "olimorris/neotest-phpunit",
   },
   config = function()
     require("neotest").setup {
       adapters = {
+        require "neotest-phpunit" {
+          phpunit_cmd = function()
+            return "vendor/bin/phpunit"
+          end,
+        },
         require "neotest-pest" {
           ignore_dirs = { "vendor", "node_modules" },
           root_ignore_files = { "phpunit-only.tests" },

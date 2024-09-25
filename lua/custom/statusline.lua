@@ -97,7 +97,34 @@ local function root_name()
   return last_dir
 end
 
--- Define the statusline
+-- local function get_wakatime_today()
+--   local wakatime_cli = os.getenv "HOME" .. "/.wakatime/wakatime-cli-darwin-arm64"
+--
+--   local handle = io.popen(wakatime_cli .. " --today")
+--
+--   local result = handle:read "*a"
+--   handle:close()
+--   return result
+-- end
+
+-- local wakatime_today = ""
+--
+-- local function update_wakatime_today()
+--   wakatime_today = "  " .. get_wakatime_today() .. " "
+-- end
+--
+-- -- Periodically update the wakatime_today variable
+-- vim.defer_fn(function()
+--   update_wakatime_today()
+--   -- Schedule next update
+--   vim.defer_fn(function()
+--     update_wakatime_today()
+--   end, 100000)
+-- end, 100000)
+--
+-- local timer = vim.loop.new_timer()
+-- timer:start(0, 100000, vim.schedule_wrap(update_wakatime_today))
+
 function _G.statusline()
   return table.concat {
     "%#StatusLine#",
@@ -117,6 +144,8 @@ function _G.statusline()
     "%=",
     " ",
     macro_recording(),
+    -- " ",
+    -- wakatime_today,
     " ",
     root_name(),
     " ",
