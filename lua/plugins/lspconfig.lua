@@ -92,7 +92,7 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
-      tsserver = {},
+      ts_ls = {},
       html = {
         filetypes = { "html", "templ", "blade" },
         init_options = {

@@ -28,3 +28,23 @@ snippet testa "test method (annotation)"
 	{
 		${0}
 	}
+
+snippet foreach "foreach without key"
+	foreach ($1 as $2) {
+                ${0}
+        }
+
+snippet foreachk "foreach with key"
+	foreach ($1 as $2 => $3) {
+		${0}
+	}
+
+snippet if "if"
+	if ($1) {
+	  $2
+	}
+snippet for "for"
+	for ($1 = $2; $1 < $3; $1++) {
+                ${0}
+        }
+
