@@ -3,9 +3,9 @@ return { -- Useful plugin to show you pending keybinds.
   event = "VimEnter", -- Sets the loading event to 'VimEnter'
   enabled = true,
   config = function() -- This is the function that runs, AFTER loading
-    require("which-key").setup()
+    local wk = require "which-key"
 
-    require("which-key").register {
+    wk.add {
       ["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
       ["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
       ["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
