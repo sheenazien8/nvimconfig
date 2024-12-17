@@ -104,6 +104,8 @@ local function open_floating_window(result_lines)
 
   vim.api.nvim_buf_set_option(M.tinker_buf, "modifiable", false)
   vim.api.nvim_buf_set_option(M.tinker_buf, "filetype", "php")
+
+  vim.api.nvim_set_current_win(M.tinker_win)
 end
 
 local function open_split_window(result_lines)
