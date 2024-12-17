@@ -22,6 +22,13 @@ return { -- Autocompletion
     local luasnip = require "luasnip"
     require("luasnip/loaders/from_snipmate").lazy_load()
     luasnip.config.setup {}
+    local has_words_before = function()
+      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        return false
+      end
+      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match "^%s*$" == nil
+    end
 
     cmp.setup {
       snippet = {
@@ -36,8 +43,9 @@ return { -- Autocompletion
             cmp.select_next_item()
           elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
-            -- elseif has_words_before() then
-            -- 	cmp.complete()
+          elseif cmp.visible() and has_words_before() then
+            cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+            -- cmp.complete()
           else
             fallback()
           end
@@ -73,7 +81,7 @@ return { -- Autocompletion
         ["<CR>"] = cmp.mapping.confirm { select = true }, --
       },
       sources = {
-        -- { name = "copilot" },
+        { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "path" },
@@ -93,7 +101,7 @@ return { -- Autocompletion
           local kind = require("lspkind").cmp_format {
             mode = "symbol_text",
             maxwidth = 50,
-            symbol_map = { Codeium = "" },
+            symbol_map = { Codeium = "", Copilot = "" },
           }(entry, vim_item)
 
           local strings = vim.split(kind.kind, "%s", { trimempty = true })

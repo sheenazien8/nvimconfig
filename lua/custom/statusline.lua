@@ -125,33 +125,42 @@ end
 -- local timer = vim.loop.new_timer()
 -- timer:start(0, 100000, vim.schedule_wrap(update_wakatime_today))
 
+local function safe_call(func, default)
+  local status, result = pcall(func)
+  if status then
+    return result
+  else
+    return default
+  end
+end
+
 function _G.statusline()
   return table.concat {
     "%#StatusLine#",
     " ",
-    mode(),
+    safe_call(mode, ""),
     " ",
-    fileicon(),
+    safe_call(fileicon, ""),
     " ",
-    filename(),
+    safe_call(filename, "[No Name]"),
     " ",
     "[",
-    filetype(),
+    safe_call(filetype, ""),
     "] ",
     " [",
-    branch(),
+    safe_call(branch, ""),
     "] ",
     "%=",
     " ",
-    macro_recording(),
+    safe_call(macro_recording, ""),
     -- " ",
-    -- wakatime_today,
+    -- safe_call(function() return wakatime_today end, ""),
     " ",
-    root_name(),
+    safe_call(root_name, ""),
     " ",
-    linecol(),
+    safe_call(linecol, "0:0"),
     " ",
-    percentage(),
+    safe_call(percentage, "0%"),
     " ",
   }
 end
