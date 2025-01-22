@@ -31,7 +31,12 @@ return {
       require("mini.pairs").setup()
     end,
   },
-  "mattn/emmet-vim",
+  {
+    "olrtg/nvim-emmet",
+    config = function()
+      vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
+    end,
+  },
   "adelarsq/vim-matchit",
   config = function()
     vim.cmd [[runtime macros/matchit.vim]]

@@ -79,13 +79,21 @@ local function branch()
     })
     :sync()
 
-  return Branch[1] or ""
+  if Branch == nil then
+    return ""
+  end
+
+  if Branch[1] ~= "" then
+    return " " .. Branch[1]
+  end
+
+  return ""
 end
 
 local function macro_recording()
-  local mode = require("noice").api.statusline.mode.get()
-  if mode then
-    return string.match(mode, "^recording @.*") or ""
+  local noicemode = require("noice").api.status.mode.get()
+  if noicemode then
+    return string.match(noicemode, "^recording @.*") or ""
   end
   return ""
 end
@@ -97,32 +105,21 @@ local function root_name()
   return last_dir
 end
 
--- local function get_wakatime_today()
---   local wakatime_cli = os.getenv "HOME" .. "/.wakatime/wakatime-cli-darwin-arm64"
---
---   local handle = io.popen(wakatime_cli .. " --today")
---
---   local result = handle:read "*a"
---   handle:close()
---   return result
--- end
+local wakatime_today = ""
 
--- local wakatime_today = ""
---
--- local function update_wakatime_today()
---   wakatime_today = "  " .. get_wakatime_today() .. " "
--- end
---
--- -- Periodically update the wakatime_today variable
--- vim.defer_fn(function()
---   update_wakatime_today()
---   -- Schedule next update
---   vim.defer_fn(function()
---     update_wakatime_today()
---   end, 100000)
--- end, 100000)
---
--- local timer = vim.loop.new_timer()
+local function update_wakatime_today()
+  local wakatime_cli = os.getenv "HOME" .. "/.wakatime/wakatime-cli-darwin-arm64"
+  local handle = io.popen(wakatime_cli .. " --today")
+  if handle == nil then
+    return
+  end
+  local result = handle:read "*a"
+  handle:close()
+  wakatime_today = "  " .. result .. " "
+end
+
+-- Periodically update the wakatime_today variable
+local timer = vim.loop.new_timer()
 -- timer:start(0, 100000, vim.schedule_wrap(update_wakatime_today))
 
 local function safe_call(func, default)
@@ -153,8 +150,8 @@ function _G.statusline()
     "%=",
     " ",
     safe_call(macro_recording, ""),
-    -- " ",
-    -- safe_call(function() return wakatime_today end, ""),
+    " ",
+    safe_call(function() return wakatime_today end, ""),
     " ",
     safe_call(root_name, ""),
     " ",

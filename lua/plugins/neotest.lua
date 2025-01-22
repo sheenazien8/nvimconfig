@@ -1,3 +1,30 @@
+local function checkBinIsNeotest()
+  local project_dir = vim.fn.getcwd()
+  -- check if the file in ./vendor/bin/pest exists
+  if vim.fn.filereadable(project_dir .. "/vendor/bin/pest") == 1 then
+    return require "neotest-pest" {
+      ignore_dirs = { "vendor", "node_modules" },
+      root_ignore_files = { "phpunit-only.tests" },
+      test_file_suffixes = { "Test.php", "_test.php", "PestTest.php" },
+      sail_enabled = function()
+        return false
+      end,
+      sail_executable = project_dir .. "/vendor/bin/sail",
+      sail_project_path = "/var/www/html",
+      pest_cmd = project_dir .. "/vendor/bin/pest",
+      parallel = 16,
+      compact = false,
+    }
+  else
+    return require "neotest-phpunit" {
+      phpunit_cmd = function()
+        return project_dir .. "/vendor/bin/phpunit"
+      end,
+    }
+  end
+end
+
+
 return {
   "nvim-neotest/neotest",
   dependencies = {
@@ -13,24 +40,7 @@ return {
   config = function()
     require("neotest").setup {
       adapters = {
-        require "neotest-phpunit" {
-          phpunit_cmd = function()
-            return "vendor/bin/phpunit"
-          end,
-        },
-        require "neotest-pest" {
-          ignore_dirs = { "vendor", "node_modules" },
-          root_ignore_files = { "phpunit-only.tests" },
-          test_file_suffixes = { "Test.php", "_test.php", "PestTest.php" },
-          sail_enabled = function()
-            return false
-          end,
-          sail_executable = "vendor/bin/sail",
-          sail_project_path = "/var/www/html",
-          pest_cmd = "vendor/bin/pest",
-          parallel = 16,
-          compact = false,
-        },
+        checkBinIsNeotest(),
         require "neotest-jest" {
           jestCommand = "npm run test:e2e",
           jestConfigFile = "custom.jest.config.ts",

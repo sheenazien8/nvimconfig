@@ -1,4 +1,4 @@
-return { -- Autocompletion
+return {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
   dependencies = {
@@ -14,6 +14,8 @@ return { -- Autocompletion
     "saadparwaiz1/cmp_luasnip",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
+    'tzachar/cmp-ai',
+    "milanglacier/minuet-ai.nvim",
     "onsails/lspkind.nvim",
   },
   config = function()
@@ -78,10 +80,11 @@ return { -- Autocompletion
             luasnip.jump(-1)
           end
         end, { "i", "s" }),
-        ["<CR>"] = cmp.mapping.confirm { select = true }, --
+        ["<CR>"] = cmp.mapping.confirm { select = true },
       },
       sources = {
-        { name = "copilot" },
+        { name = "cmp_ai" },
+        -- { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "path" },
@@ -101,8 +104,8 @@ return { -- Autocompletion
           local kind = require("lspkind").cmp_format {
             mode = "symbol_text",
             maxwidth = 50,
-            symbol_map = { Codeium = "", Copilot = "" },
-          }(entry, vim_item)
+            symbol_map = { Codeium = "", Copilot = "", Codestral = "" },
+          } (entry, vim_item)
 
           local strings = vim.split(kind.kind, "%s", { trimempty = true })
           kind.kind = " " .. (strings[1] or "") .. " "
@@ -127,10 +130,52 @@ return { -- Autocompletion
         local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }
         local params = lsp_util.make_range_params()
         params.context = context
+        if vim.tbl_isempty(params.context.diagnostics) then
+          return
+        end
         vim.lsp.buf_request(0, "textDocument/codeAction", params, function(err, result, ctx, config)
           -- do something with result - e.g. check if empty and show some indication such as a sign
         end)
       end,
     })
+
+    local cmp_ai = require('cmp_ai.config')
+
+    cmp_ai:setup({
+      max_lines = 1000,
+      provider = 'Codestral',
+      provider_options = {
+        model = 'codestral-latest',
+        prompt = function(lines_before, lines_after)
+          return lines_before
+        end,
+        suffix = function(lines_after)
+          return lines_after
+        end
+      },
+      notify = false,
+      notify_callback = function(msg)
+        vim.notify(msg)
+      end,
+      run_on_every_keystroke = true,
+    })
+    -- cmp_ai:setup({
+    --   max_lines = 100,
+    --   provider = 'Ollama',
+    --   provider_options = {
+    --     model = 'codegemma:2b-code',
+    --     prompt = function(lines_before, lines_after)
+    --       return lines_before
+    --     end,
+    --     suffix = function(lines_after)
+    --       return lines_after
+    --     end,
+    --   },
+    --   notify = true,
+    --   notify_callback = function(msg)
+    --     vim.notify(msg)
+    --   end,
+    --   run_on_every_keystroke = true,
+    -- })
   end,
 }
