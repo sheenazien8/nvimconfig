@@ -14,9 +14,11 @@ return {
     "saadparwaiz1/cmp_luasnip",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
+    'hrsh7th/cmp-cmdline',
     'tzachar/cmp-ai',
     "milanglacier/minuet-ai.nvim",
     "onsails/lspkind.nvim",
+    "petertriho/cmp-git"
   },
   config = function()
     -- See `:help cmp`
@@ -52,7 +54,19 @@ return {
             fallback()
           end
         end, { "i", "s" }),
-
+        ['<C-x>'] = cmp.mapping(
+          cmp.mapping.complete({
+            config = {
+              sources = cmp.config.sources({
+                { name = 'cmp_ai' },
+                { name = "copilot" },
+                { name = "supermaven" },
+                { name = "codeium" },
+              }),
+            },
+          }),
+          { 'i' }
+        ),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
@@ -81,22 +95,25 @@ return {
           end
         end, { "i", "s" }),
         ["<CR>"] = cmp.mapping.confirm { select = true },
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-u>'] = cmp.mapping.scroll_docs(4),
       },
       sources = {
-        { name = "cmp_ai" },
+        -- { name = "cmp_ai" },
         -- { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "path" },
-        { name = "codeium" },
         { name = "buffer" },
       },
       window = {
-        completion = {
-          winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-          col_offset = -3,
-          side_padding = 0,
-        },
+        -- completion = {
+        --   winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+        --   col_offset = -3,
+        --   side_padding = 0,
+        -- },
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
       },
       formatting = {
         fields = { "kind", "abbr", "menu" },
@@ -104,7 +121,13 @@ return {
           local kind = require("lspkind").cmp_format {
             mode = "symbol_text",
             maxwidth = 50,
-            symbol_map = { Codeium = "", Copilot = "", Codestral = "" },
+            symbol_map = {
+              Codeium = "",
+              Copilot = "",
+              Codestral = "",
+              OpenAI = "",
+              Supermaven = "",
+            },
           } (entry, vim_item)
 
           local strings = vim.split(kind.kind, "%s", { trimempty = true })
@@ -115,11 +138,39 @@ return {
         end,
       },
     }
+
     cmp.setup.filetype({ "mysql", "sql" }, {
       sources = {
         { name = "vim-dadbod-completion" },
         { name = "buffer" },
       },
+    })
+
+    cmp.setup.filetype('gitcommit', {
+      sources = cmp.config.sources({
+        { name = 'git' },
+      }, {
+        { name = 'buffer' },
+      })
+    })
+
+    require("cmp_git").setup({})
+
+    cmp.setup.cmdline({ '/', '?' }, {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = 'buffer' }
+      }
+    })
+
+    cmp.setup.cmdline(':', {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = cmp.config.sources({
+        { name = 'path' }
+      }, {
+        { name = 'cmdline' }
+      }),
+      matching = { disallow_symbol_nonprefix_matching = false }
     })
 
     local lsp_util = vim.lsp.util
@@ -159,6 +210,25 @@ return {
       end,
       run_on_every_keystroke = true,
     })
+
+    cmp_ai:setup({
+      max_lines = 1000,
+      provider = 'OpenAI',
+      provider_options = {
+        model = 'gpt-4',
+      },
+      notify = true,
+      notify_callback = function(msg)
+        vim.notify(msg)
+      end,
+      run_on_every_keystroke = true,
+      ignored_file_types = {
+        -- default is not to ignore
+        -- uncomment to ignore in lua:
+        -- lua = true
+      },
+    })
+
     -- cmp_ai:setup({
     --   max_lines = 100,
     --   provider = 'Ollama',
