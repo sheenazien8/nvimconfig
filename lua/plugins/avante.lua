@@ -4,7 +4,7 @@ return {
   lazy = false,
   version = false, -- set this if you want to always pull the latest change
   opts = {
-    provider = "codestral",
+    provider = "deepseek",
     vendors = {
       ["codestral"] = {
         -- __inherited_from = "codestral",
@@ -51,7 +51,30 @@ return {
         parse_response_data = function(data_stream, event_state, opts)
           require("avante.providers").openai.parse_response(data_stream, event_state, opts)
         end,
-      }
+      },
+      ["deepseek"] = {
+        api_key_name = "DEEPSEEK_API_KEY",
+        endpoint = "https://api.deepseek.com/chat/completions",
+        model = "deepseek-chat",
+        parse_curl_args = function(opts, code_opts)
+          return {
+            url = opts.endpoint,
+            headers = {
+              ["Content-Type"] = "application/json",
+              ["Authorization"] = "Bearer " .. os.getenv(opts.api_key_name),
+            },
+            body = {
+              model = opts.model,
+              messages = require("avante.providers").copilot.parse_messages(code_opts),
+              max_tokens = 2048,
+              stream = true,
+            },
+          }
+        end,
+        parse_response_data = function(data_stream, event_state, opts)
+          require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+        end,
+      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

@@ -3,7 +3,6 @@ vim.keymap.set("i", "jk", "<ESC>", { noremap = true })
 vim.keymap.set("i", "kj", "<ESC>", { noremap = true })
 vim.keymap.set("i", "jj", "<ESC>", { noremap = true })
 vim.keymap.set("i", "jl", "<ESC>", { noremap = true })
-
 vim.keymap.set("n", "<ESC>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<CR>")
 
