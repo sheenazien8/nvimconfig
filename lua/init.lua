@@ -27,3 +27,37 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo.expandtab = true
   end,
 })
+
+--[[ vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "php", "blade" },
+  callback = function()
+    vim.lsp.start {
+      name = "laravel-ls",
+      cmd = { "/Users/sheenazien8/go/bin/laravel-ls" },
+      -- if you want to recompile everytime
+      -- the language server is started.
+      -- Uncomment this line instead
+      -- cmd = { '/path/to/laravel-ls/start.sh' },
+      root_dir = vim.fn.getcwd(),
+    }
+  end,
+}) ]]
+
+--[[ vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "php", "blade" },
+  callback = function()
+    local client = vim.lsp.start {
+      name = "blade-lsp",
+      cmd = { "/Users/sheenazien8/Documents/Code/fun/blade-lsp.nvim/blade-lsp.nvim" },
+      root_dir = vim.fs.root(0, { "composer.json", "artisan" }),
+      on_error = function(code, err)
+        vim.notify(err, vim.log.levels.ERROR)
+      end,
+    }
+
+    if not client then
+      vim.notify("Error starting client blade-lsp.nvim", vim.log.levels.ERROR)
+      return
+    end
+  end,
+}) ]]

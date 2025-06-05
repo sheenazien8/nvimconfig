@@ -151,7 +151,9 @@ function _G.statusline()
     " ",
     safe_call(macro_recording, ""),
     " ",
-    safe_call(function() return wakatime_today end, ""),
+    safe_call(function()
+      return wakatime_today
+    end, ""),
     " ",
     safe_call(root_name, ""),
     " ",

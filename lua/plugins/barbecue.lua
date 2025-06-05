@@ -1,4 +1,6 @@
+-- plugins for show the breadcumbs
 return {
+  enabled = false,
   "utilyre/barbecue.nvim",
   name = "barbecue",
   version = "*",

@@ -15,9 +15,9 @@ local terminal_winid = nil
 
 function M.open_terminal()
   if terminal_bufnr == nil or not vim.api.nvim_buf_is_valid(terminal_bufnr) then
-    vim.cmd("vsplit")
+    vim.cmd "vsplit"
     terminal_winid = vim.api.nvim_get_current_win()
-    vim.cmd("terminal")
+    vim.cmd "terminal"
     terminal_bufnr = vim.api.nvim_get_current_buf()
     vim.api.nvim_buf_set_option(terminal_bufnr, "buflisted", false)
   else
@@ -34,7 +34,6 @@ function M.toggle_terminal()
   else
     vim.api.nvim_set_current_win(terminal_winid)
   end
-
 end
 
 return M

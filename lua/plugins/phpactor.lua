@@ -1,5 +1,6 @@
 return {
   "gbprod/phpactor.nvim",
+  enabled = false,
   build = function()
     require "phpactor.handler.update"()
   end,
