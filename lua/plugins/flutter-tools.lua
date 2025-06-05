@@ -1,3 +1,4 @@
+-- flutter tools
 return {
 	"akinsho/flutter-tools.nvim",
 	lazy = false,

@@ -1,3 +1,4 @@
+-- plugin for handling completion
 return {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
@@ -59,7 +60,8 @@ return {
             config = {
               sources = cmp.config.sources({
                 { name = 'cmp_ai' },
-                { name = "copilot" },
+                { name = 'minuet' },
+                -- { name = "copilot" },
                 { name = "supermaven" },
                 { name = "codeium" },
               }),
@@ -99,8 +101,6 @@ return {
         ['<C-u>'] = cmp.mapping.scroll_docs(4),
       },
       sources = {
-        -- { name = "cmp_ai" },
-        -- { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "path" },
@@ -119,6 +119,7 @@ return {
         fields = { "kind", "abbr", "menu" },
         format = function(entry, vim_item)
           local kind = require("lspkind").cmp_format {
+            preset = 'codicons',
             mode = "symbol_text",
             maxwidth = 50,
             symbol_map = {
@@ -126,9 +127,35 @@ return {
               Copilot = "",
               Codestral = "",
               OpenAI = "",
-              Supermaven = "",
+              Supermaven = "󱗻",
+              Text = "󰉿",
+              Method = "󰆧",
+              Function = "󰊕",
+              Constructor = "",
+              Field = "󰜢",
+              Variable = "󰀫",
+              Class = "󰠱",
+              Interface = "",
+              Module = "",
+              Property = "󰜢",
+              Unit = "󰑭",
+              Value = "󰎠",
+              Enum = "",
+              Keyword = "󰌋",
+              Snippet = "",
+              Color = "󰏘",
+              File = "󰈙",
+              Reference = "󰈇",
+              Folder = "󰉋",
+              EnumMember = "",
+              Constant = "󰏿",
+              Struct = "󰙅",
+              Event = "",
+              Operator = "󰆕",
+              TypeParameter = "",
             },
           } (entry, vim_item)
+
 
           local strings = vim.split(kind.kind, "%s", { trimempty = true })
           kind.kind = " " .. (strings[1] or "") .. " "
@@ -178,7 +205,7 @@ return {
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
       group = vim.api.nvim_create_augroup("code_action_sign", { clear = true }),
       callback = function()
-        local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }
+        local context = { diagnostics = vim.diagnostic.get() }
         local params = lsp_util.make_range_params()
         params.context = context
         if vim.tbl_isempty(params.context.diagnostics) then
@@ -211,23 +238,23 @@ return {
       run_on_every_keystroke = true,
     })
 
-    cmp_ai:setup({
-      max_lines = 1000,
-      provider = 'OpenAI',
-      provider_options = {
-        model = 'gpt-4',
-      },
-      notify = true,
-      notify_callback = function(msg)
-        vim.notify(msg)
-      end,
-      run_on_every_keystroke = true,
-      ignored_file_types = {
-        -- default is not to ignore
-        -- uncomment to ignore in lua:
-        -- lua = true
-      },
-    })
+    -- cmp_ai:setup({
+    --   max_lines = 1000,
+    --   provider = 'OpenAI',
+    --   provider_options = {
+    --     model = 'gpt-4',
+    --   },
+    --   notify = true,
+    --   notify_callback = function(msg)
+    --     vim.notify(msg)
+    --   end,
+    --   run_on_every_keystroke = true,
+    --   ignored_file_types = {
+    --     -- default is not to ignore
+    --     -- uncomment to ignore in lua:
+    --     -- lua = true
+    --   },
+    -- })
 
     -- cmp_ai:setup({
     --   max_lines = 100,

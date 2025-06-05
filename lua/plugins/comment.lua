@@ -1,3 +1,4 @@
+-- plugins for handling comment
 return {
   "numToStr/Comment.nvim",
   opts = {

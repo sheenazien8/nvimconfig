@@ -14,32 +14,41 @@ local function my_on_attach(bufnr)
   vim.keymap.set("n", "?", api.tree.toggle_help, opts "Help")
 end
 
+local circles = require "circles"
+
+circles.setup { icons = { empty = "", filled = "", lsp_prefix = "" } }
+
 return {
-  enabled = false,
+  enabled = true,
   "nvim-tree/nvim-tree.lua",
   version = "*",
   lazy = false,
   dependencies = {
     "nvim-tree/nvim-web-devicons",
   },
-  config = function()
-    require("nvim-tree").setup {
-      on_attach = my_on_attach,
-      sort = {
-        sorter = "case_sensitive",
+  opts = {
+    on_attach = my_on_attach,
+    sort = {
+      sorter = "case_sensitive",
+    },
+    view = {
+      width = 50,
+      float = {
+        enable = false,
       },
-      view = {
-        width = 30,
-        side = "right",
+      side = "right",
+    },
+    renderer = {
+      group_empty = true,
+      icons = {
+        glyphs = circles.get_nvimtree_glyphs(),
       },
-      renderer = {
-        group_empty = true,
-      },
-      filters = {
-        dotfiles = false,
-      },
-    }
-
-    vim.keymap.set("n", "<C-\\>", ":NvimTreeFindFileToggle<CR>")
-  end,
+    },
+    filters = {
+      dotfiles = false,
+    },
+    diagnostics = {
+      enable = true,
+    },
+  },
 }

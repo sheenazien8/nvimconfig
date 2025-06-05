@@ -18,6 +18,12 @@ return { -- LSP Configuration & Plugins
         end
 
         -- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+        map("gs", function()
+          require("telescope.builtin").lsp_document_symbols(require("telescope.themes").get_dropdown {
+            winblend = 10,
+            previewer = false,
+          })
+        end, "[G]oto [S]ymbols")
         --
         map("grr", vim.lsp.buf.references, "[G]oto [R]eferences")
         --
@@ -50,6 +56,7 @@ return { -- LSP Configuration & Plugins
           -- vim.bo[event.buf].omnifunc = nil
           -- vim.keymap.del("n", "K", { buffer = event.buf })
         end
+        -- require 'nvim_lsp'.ocamllsp.setup { on_attach = require 'virtualtypes'.on_attach }
       end,
     })
 
@@ -64,6 +71,7 @@ return { -- LSP Configuration & Plugins
     local bin_name = "intelephense"
     local servers = {
       intelephense = {
+        -- on_attach = require 'virtualtypes'.on_attach,
         cmd = { bin_name, "--stdio" },
         filetypes = { "php", "blade" },
         root_dir = function(pattern)
@@ -106,7 +114,7 @@ return { -- LSP Configuration & Plugins
         },
       },
       emmet_language_server = {
-        filetypes = { "html", "templ", "blade" },
+        filetypes = { "html", "templ", "blade", "tsx", "jsx" },
       },
       -- phpactor = {},
     }
@@ -128,15 +136,15 @@ return { -- LSP Configuration & Plugins
       -- Capabilities is specific to my setup.
       capabilities = capabilities,
     }
-    vim.lsp.util.apply_text_document_edit = function(text_document_edit, index, offset_encoding)
-      local text_document = text_document_edit.textDocument
-      local bufnr = vim.uri_to_bufnr(text_document.uri)
-      if offset_encoding == nil then
-        vim.notify_once("apply_text_document_edit must be called with valid offset encoding", vim.log.levels.WARN)
-      end
-
-      vim.lsp.util.apply_text_edits(text_document_edit.edits, bufnr, offset_encoding)
-    end
+    -- vim.lsp.util.apply_text_document_edit = function(text_document_edit, index, offset_encoding)
+    --   local text_document = text_document_edit.textDocument
+    --   local bufnr = vim.uri_to_bufnr(text_document.uri)
+    --   if offset_encoding == nil then
+    --     vim.notify_once("apply_text_document_edit must be called with valid offset encoding", vim.log.levels.WARN)
+    --   end
+    --
+    --   vim.lsp.util.apply_text_edits(text_document_edit.edits, bufnr, offset_encoding)
+    -- end
 
     require("mason").setup()
 
