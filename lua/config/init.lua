@@ -13,7 +13,7 @@ tinker.setup {
 
 require("custom.terminal").setup()
 
-vim.cmd "colorscheme gruvbox"
+vim.cmd "colorscheme ayu"
 -- vim.cmd("colorscheme kanagawa")
 
 -- autoloader keymaps for all files

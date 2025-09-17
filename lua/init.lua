@@ -28,36 +28,36 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
---[[ vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "blade", "php" },
+  callback = function()
+    vim.lsp.config("blade-lsp", {
+      name = "blade-lsp",
+      cmd = { "/Users/sheenazien8/Documents/Code/fun/blade-lsp.nvim/blade-lsp" },
+      root_dir = vim.fs.dirname(vim.fs.find({ '.git', 'composer.json' }, { upward = true })[1]),
+    })
+    vim.lsp.enable("blade-lsp")
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
   pattern = { "php", "blade" },
   callback = function()
-    vim.lsp.start {
+    vim.lsp.config("laravel-ls", {
       name = "laravel-ls",
-      cmd = { "/Users/sheenazien8/go/bin/laravel-ls" },
+
+      -- if laravel ls is in your $PATH
+      cmd = { '/Users/sheenazien8/Documents/Code/fun/laravel-ls/build/laravel-ls', '--log-level', 'debug' },
+
+      -- Absolute path
+      -- cmd = { '/path/to/laravel-ls/build/laravel-ls' },
+
       -- if you want to recompile everytime
       -- the language server is started.
-      -- Uncomment this line instead
       -- cmd = { '/path/to/laravel-ls/start.sh' },
-      root_dir = vim.fn.getcwd(),
-    }
-  end,
-}) ]]
 
---[[ vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "php", "blade" },
-  callback = function()
-    local client = vim.lsp.start {
-      name = "blade-lsp",
-      cmd = { "/Users/sheenazien8/Documents/Code/fun/blade-lsp.nvim/blade-lsp.nvim" },
-      root_dir = vim.fs.root(0, { "composer.json", "artisan" }),
-      on_error = function(code, err)
-        vim.notify(err, vim.log.levels.ERROR)
-      end,
-    }
-
-    if not client then
-      vim.notify("Error starting client blade-lsp.nvim", vim.log.levels.ERROR)
-      return
-    end
-  end,
-}) ]]
+      root_dir = vim.fs.dirname(vim.fs.find({ '.git', 'composer.json' }, { upward = true })[1]),
+    })
+    vim.lsp.enable("laravel-ls")
+  end
+})
