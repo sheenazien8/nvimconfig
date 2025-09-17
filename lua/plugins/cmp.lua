@@ -59,11 +59,11 @@ return {
           cmp.mapping.complete({
             config = {
               sources = cmp.config.sources({
-                { name = 'cmp_ai' },
-                { name = 'minuet' },
+                -- { name = 'cmp_ai' },
+                -- { name = 'minuet' },
                 -- { name = "copilot" },
-                { name = "supermaven" },
-                { name = "codeium" },
+                -- { name = "supermaven" },
+                -- { name = "codeium" },
               }),
             },
           }),
@@ -105,6 +105,7 @@ return {
         { name = "luasnip" },
         { name = "path" },
         { name = "buffer" },
+        { name = "copilot" },
       },
       window = {
         -- completion = {
@@ -205,6 +206,21 @@ return {
     vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
       group = vim.api.nvim_create_augroup("code_action_sign", { clear = true }),
       callback = function()
+        -- Check if any LSP client supports code actions before making the request
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        local has_code_action_support = false
+        
+        for _, client in pairs(clients) do
+          if client.supports_method("textDocument/codeAction") then
+            has_code_action_support = true
+            break
+          end
+        end
+        
+        if not has_code_action_support then
+          return
+        end
+        
         local context = { diagnostics = vim.diagnostic.get() }
         local params = lsp_util.make_range_params()
         params.context = context
@@ -213,30 +229,34 @@ return {
         end
         vim.lsp.buf_request(0, "textDocument/codeAction", params, function(err, result, ctx, config)
           -- do something with result - e.g. check if empty and show some indication such as a sign
+          if err then
+            -- Silently ignore errors to prevent spam
+            return
+          end
         end)
       end,
     })
 
-    local cmp_ai = require('cmp_ai.config')
-
-    cmp_ai:setup({
-      max_lines = 1000,
-      provider = 'Codestral',
-      provider_options = {
-        model = 'codestral-latest',
-        prompt = function(lines_before, lines_after)
-          return lines_before
-        end,
-        suffix = function(lines_after)
-          return lines_after
-        end
-      },
-      notify = false,
-      notify_callback = function(msg)
-        vim.notify(msg)
-      end,
-      run_on_every_keystroke = true,
-    })
+    -- local cmp_ai = require('cmp_ai.config')
+    --
+    -- cmp_ai:setup({
+    --   max_lines = 1000,
+    --   provider = 'Codestral',
+    --   provider_options = {
+    --     model = 'codestral-latest',
+    --     prompt = function(lines_before, lines_after)
+    --       return lines_before
+    --     end,
+    --     suffix = function(lines_after)
+    --       return lines_after
+    --     end
+    --   },
+    --   notify = false,
+    --   notify_callback = function(msg)
+    --     vim.notify(msg)
+    --   end,
+    --   run_on_every_keystroke = true,
+    -- })
 
     -- cmp_ai:setup({
     --   max_lines = 1000,

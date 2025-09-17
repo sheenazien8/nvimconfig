@@ -1,0 +1,11 @@
+return {
+  on_attach = function(client, bufnr)
+    print("PHPactor attached to buffer " .. bufnr)
+    client.server_capabilities.diagnosticProvider = false
+    -- print(vim.inspect(client.server_capabilities))
+  end,
+  init_options = {
+    ["language_server_phpstan.enabled"] = false,
+    ["language_server_psalm.enabled"] = false,
+  },
+}

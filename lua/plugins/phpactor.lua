@@ -1,22 +1,14 @@
 return {
   "gbprod/phpactor.nvim",
   enabled = false,
-  build = function()
-    require "phpactor.handler.update"()
-  end,
+  ft = "php",
   dependencies = {
     "nvim-lua/plenary.nvim",
     "neovim/nvim-lspconfig",
+    -- If the update/install notification doesn't show properly,
+    -- you should also add here UI plugins like "folke/noice.nvim" or "stevearc/dressing.nvim"
   },
-  config = function(opts)
-    require("phpactor").setup {
-      lspconfig = {
-        enabled = false,
-        options = {},
-      },
-    }
-    vim.keymap.set("n", "<leader>pn", ":PhpActor navigate<CR>")
-    vim.keymap.set("n", "<leader>pc", ":PhpActor context_menu<CR>")
-    vim.keymap.set("n", "<leader>pt", ":PhpActor transform<CR>")
-  end,
+  opts = {
+    -- you're options goes here
+  },
 }

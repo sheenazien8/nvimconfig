@@ -1,11 +1,12 @@
 -- plugins for ai chat cursor looklike
 return {
   "yetone/avante.nvim",
+  enabled = false,
   event = "VeryLazy",
   lazy = false,
   version = false,
   opts = {
-    provider = "openai",
+    provider = "copilot",
     behaviour = {
       auto_suggestions = false, -- Experimental stage
     },
@@ -33,12 +34,12 @@ return {
         },
       },
     },
-    {
-      "MeanderingProgrammer/render-markdown.nvim",
-      opts = {
-        file_types = { "markdown", "Avante" },
-      },
-      ft = { "markdown", "Avante" },
-    },
+    -- {
+    --   "MeanderingProgrammer/render-markdown.nvim",
+    --   opts = {
+    --     file_types = { "markdown", "Avante" },
+    --   },
+    --   ft = { "markdown", "Avante" },
+    -- },
   },
 }
