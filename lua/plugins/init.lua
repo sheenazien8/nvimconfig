@@ -46,25 +46,9 @@ return {
     },
   },
   {
-    "nvzone/typr",
-    dependencies = "nvzone/volt",
-    opts = {},
-    cmd = { "Typr", "TyprStats" },
-  },
-  {
-    "preservim/vimux",
-  },
-  {
     "shabaraba/pile.nvim",
     enabled = false,
     opts = {},
-  },
-  {
-    "lewis6991/satellite.nvim",
-    enabled = false,
-    config = function()
-      require("satellite").setup {}
-    end,
   },
   {
     "jake-stewart/auto-cmdheight.nvim",
@@ -112,32 +96,58 @@ return {
   },
   "ggandor/leap.nvim",
   {
-    "nvim-orgmode/orgmode",
-    event = "VeryLazy",
-    config = function()
-      -- Setup orgmode
-      require("orgmode").setup {
-        org_agenda_files = "~/orgfiles/**/*",
-        org_default_notes_file = "~/orgfiles/refile.org",
-      }
-    end,
-  },
-  -- lazy.nvim
-  {
-    "rodrigoscc/http.nvim",
-    config = function()
-      require("http-nvim").setup()
-    end,
-    build = { ":TSUpdate http2", ":Http update_grammar_queries" },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-telescope/telescope.nvim", -- optional: uses it as picker
-      "ibhagwan/fzf-lua",              -- optional: uses it as picker
-      "folke/snacks.nvim",             -- optional: uses it as picker
-    },
-  },
-  {
     'tjdevries/present.nvim'
+  },
+  {
+    dir = "/Users/sheenazien8/Documents/Code/fun/rest.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      opts = function(_, opts)
+        opts.ensure_installed = opts.ensure_installed or {}
+        table.insert(opts.ensure_installed, "http")
+      end,
+    }
+  },
+  {
+    "folke/todo-comments.nvim",
+    event = "VimEnter",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = { signs = true },
+  },
+  {                     -- Useful plugin to show you pending keybinds.
+    "folke/which-key.nvim",
+    event = "VimEnter", -- Sets the loading event to 'VimEnter'
+    enabled = true,
+    opts = {
+      preset = "modern",
+    },
+    config = true,
+  },
+  {
+    "NvChad/nvim-colorizer.lua",
+  },
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    -- optionally, override the default options:
+    config = true,
+    -- config = function()
+    -- 	require("tailwindcss-colorizer-cmp").setup({
+    -- 		color_square_width = 2,
+    -- 	})
+    -- end,
+  },
+  {
+    "Bekaboo/dropbar.nvim",
+    -- optional, but required for fuzzy finder support
+    dependencies = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+    },
+    config = function()
+      local dropbar_api = require "dropbar.api"
+      vim.keymap.set("n", "<Leader>;", dropbar_api.pick, { desc = "Pick symbols in winbar" })
+      vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
+      vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
+    end,
   }
 }

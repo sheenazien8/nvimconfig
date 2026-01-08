@@ -1,3 +1,56 @@
+local M = {}
+
+-- Filter helper: only keep method & function symbols
+-- TODO: still bug, not filtering the method only
+local function filter_methods_and_functions(symbols)
+  local filtered = {}
+
+  local function handle_symbol(item)
+    local kind = item.kind
+    -- Filter ONLY methods + functions
+    if kind == vim.lsp.protocol.SymbolKind.Method
+      or kind == vim.lsp.protocol.SymbolKind.Function then
+      table.insert(filtered, item)
+    end
+  end
+
+  -- Handle hierarchical DocumentSymbol[]
+  local function walk(items)
+    for _, item in ipairs(items) do
+      handle_symbol(item)
+
+      -- DocumentSymbol with children
+      if item.children then
+        walk(item.children)
+      end
+    end
+  end
+
+  walk(symbols)
+  return filtered
+end
+
+function M.LSPMethodsToQuickfix()
+  vim.lsp.buf_request(
+    0,
+    "textDocument/documentSymbol",
+    { textDocument = vim.lsp.util.make_text_document_params() },
+    function(err, result)
+      if err or not result then return end
+
+      local filtered = filter_methods_and_functions(result)
+      local items = vim.lsp.util.symbols_to_items(filtered, 0)
+
+      vim.fn.setqflist({}, " ", {
+        title = "LSP Methods",
+        items = items,
+      })
+
+      vim.cmd("botright copen")
+    end
+  )
+end
+
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -15,12 +68,7 @@ return {
         -- Only map LSP functions if the server supports them
         map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
-        map("gs", function()
-          require("telescope.builtin").lsp_document_symbols(require("telescope.themes").get_dropdown {
-            winblend = 10,
-            previewer = false,
-          })
-        end, "[G]oto [S]ymbols")
+        map("gs", M.LSPMethodsToQuickfix, "[G]oto [S]ymbols")
 
         map("grr", vim.lsp.buf.references, "[G]oto [R]eferences")
 

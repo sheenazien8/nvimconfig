@@ -7,14 +7,34 @@ local tinker = require "custom.tinker"
 
 tinker.setup {
   split_direction = "horizontal", -- or "horizontal"
-  split_size = 20, -- width or height of the split
-  file_to_watch = "tinker.php", -- file to watch for changes
+  split_size = 20,                -- width or height of the split
+  file_to_watch = "tinker.php",   -- file to watch for changes
 }
 
-require("custom.terminal").setup()
+require("custom.auto_run_sh").setup()
 
 vim.cmd "colorscheme ayu"
 -- vim.cmd("colorscheme kanagawa")
+
+-- Make cursorline more vibrant
+vim.api.nvim_set_hl(0, 'CursorLine', { bg = '#2d3f4f', bold = true })
+
+-- Make line numbers vibrant only in active buffer
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+  callback = function()
+    vim.api.nvim_set_hl(0, 'LineNr', { fg = '#00ffff' })
+    vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#ffff00', bold = true })
+    vim.opt_local.cursorline = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "WinLeave" }, {
+  callback = function()
+    vim.api.nvim_set_hl(0, 'LineNr', { fg = '#666666' })
+    vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#666666', bold = true })
+    vim.opt_local.cursorline = false
+  end,
+})
 
 -- autoloader keymaps for all files
 local keymaps_dir = vim.fn.stdpath "config" .. "/lua/config/keymaps" -- Adjust the path
@@ -22,7 +42,7 @@ local handle
 if vim.fn.has "win32" == 1 then
   handle = io.popen('dir /b "' .. keymaps_dir .. '"') -- Windows
 else
-  handle = io.popen('ls -1 "' .. keymaps_dir .. '"') -- Linux/macOS
+  handle = io.popen('ls -1 "' .. keymaps_dir .. '"')  -- Linux/macOS
 end
 
 local keymap_table = { n = {}, i = {}, v = {}, t = {} } -- Structure to hold keymaps
@@ -52,6 +72,27 @@ end
 for mode, mappings in pairs(keymap_table) do
   for key, map in pairs(mappings) do
     local command, opts = map[1], map[2] or {} -- Extract command and opts
-    vim.keymap.set(mode, key, command, opts)
+
+    -- Handle pattern option - creates autocmd for filetype-specific keymaps
+    if opts.pattern then
+      local pattern = opts.pattern
+      opts.pattern = nil
+
+      -- Ensure pattern is a table
+      if type(pattern) == "string" then
+        pattern = { pattern }
+      end
+
+      -- Create autocmd to set keymap on FileType
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = pattern,
+        callback = function()
+          vim.keymap.set(mode, key, command, opts)
+        end,
+      })
+    else
+      -- Global keymap (no pattern restriction)
+      vim.keymap.set(mode, key, command, opts)
+    end
   end
 end
