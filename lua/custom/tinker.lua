@@ -7,70 +7,64 @@ M.config = {
   file_to_watch = "tinker.php",
 }
 
-function M.run_tinker()
-  M.prev_win = vim.api.nvim_get_current_win()
-
-  M.close_tinker_window()
-
-  local result = vim.fn.system("php artisan tinker " .. M.config.file_to_watch)
-  local result_lines = vim.split(result, "\n")
-
-  M.tinker_buf = vim.api.nvim_create_buf(false, true)
-  local existing_buf = vim.fn.bufnr(M.tinker_buf)
-
-  if existing_buf == -1 then
+local function open_or_reuse_output_buf(buf_name)
+  local buf = vim.fn.bufnr(buf_name)
+  if buf == -1 then
     if M.config.split_direction == "vertical" then
       vim.cmd("vsplit | vertical resize " .. M.config.split_size)
     else
       vim.cmd("split | resize " .. M.config.split_size)
     end
-    existing_buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_name(existing_buf, M.config.output_buffer_name)
-    vim.api.nvim_win_set_buf(0, existing_buf)
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(buf, buf_name)
+    vim.api.nvim_win_set_buf(0, buf)
+    vim.api.nvim_buf_set_option(buf, "buftype", "nofile")
+    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+    vim.api.nvim_buf_set_option(buf, "filetype", "tinker-output")
+    vim.api.nvim_buf_set_keymap(buf, "n", "q", ":q<CR>", { noremap = true, silent = true })
   else
-    if M.config.split_direction == "vertical" then
-      vim.cmd("vert sb " .. existing_buf)
+    local win = vim.fn.bufwinid(buf)
+    if win == -1 then
+      if M.config.split_direction == "vertical" then
+        vim.cmd("vsplit | vertical resize " .. M.config.split_size)
+      else
+        vim.cmd("split | resize " .. M.config.split_size)
+      end
+      vim.api.nvim_win_set_buf(0, buf)
     else
-      vim.cmd("sb " .. existing_buf)
+      vim.api.nvim_set_current_win(win)
     end
   end
-
-  vim.api.nvim_buf_set_option(existing_buf, "modifiable", true)
-  vim.api.nvim_buf_set_lines(existing_buf, 0, -1, false, {})
-  vim.api.nvim_buf_set_lines(existing_buf, 0, -1, false, result_lines)
-  vim.api.nvim_buf_set_option(existing_buf, "modifiable", false)
-  vim.api.nvim_buf_set_option(existing_buf, "readonly", true)
-  vim.api.nvim_buf_set_option(existing_buf, "filetype", "tinker-output")
-
-  vim.cmd "wincmd p"
-
-  vim.api.nvim_buf_set_keymap(
-    M.tinker_buf,
-    "n",
-    "q",
-    '<Cmd>lua require("custom.tinker").close_tinker_window()<CR>',
-    { noremap = true, silent = true }
-  )
+  return vim.fn.bufnr(buf_name)
 end
 
-M.tinker_buf = nil
-M.tinker_win = nil
-M.prev_win = nil
+function M.run_tinker()
+  local prev_win = vim.api.nvim_get_current_win()
+
+  local cmd = "php artisan tinker " .. vim.fn.shellescape(M.config.file_to_watch)
+  local output = vim.fn.system(cmd)
+
+  local buf = open_or_reuse_output_buf(M.config.output_buffer_name)
+
+  vim.api.nvim_buf_set_option(buf, "modifiable", true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(output, "\n"))
+  vim.api.nvim_buf_set_option(buf, "modifiable", false)
+
+  if prev_win and vim.api.nvim_win_is_valid(prev_win) then
+    vim.api.nvim_set_current_win(prev_win)
+  end
+end
 
 function M.close_tinker_window()
-  if M.tinker_win and vim.api.nvim_win_is_valid(M.tinker_win) then
-    vim.api.nvim_win_close(M.tinker_win, true)
-  end
-
-  if M.tinker_buf and vim.api.nvim_buf_is_valid(M.tinker_buf) then
-    vim.api.nvim_buf_delete(M.tinker_buf, { force = true })
-  end
-
-  M.tinker_win = nil
-  M.tinker_buf = nil
-
-  if M.prev_win and vim.api.nvim_win_is_valid(M.prev_win) then
-    vim.api.nvim_set_current_win(M.prev_win)
+  local buf = vim.fn.bufnr(M.config.output_buffer_name)
+  if buf ~= -1 then
+    local win = vim.fn.bufwinid(buf)
+    if win ~= -1 and vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_win_close(win, true)
+    end
+    if vim.api.nvim_buf_is_valid(buf) then
+      vim.api.nvim_buf_delete(buf, { force = true })
+    end
   end
 end
 

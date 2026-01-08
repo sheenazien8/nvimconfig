@@ -5,7 +5,7 @@ return {
     ["<leader>sh"] = { builtin.help_tags, { desc = "[S]earch [H]elp" } },
     ["<leader>sk"] = { builtin.keymaps, { desc = "[S]earch [K]eymaps" } },
     ["<leader>sf"] = { builtin.find_files, { desc = "[S]earch [F]iles" } },
-    ["<c-p>"] = { builtin.find_files, { desc = "[S]earch [F]iles (no prompt)" } },
+    ["<c-p>"] = { builtin.find_files, { desc = "[S]earch [F]iles" } },
     ["<leader>ss"] = { builtin.builtin, { desc = "[S]earch [S]elect Telescope" } },
     ["<leader>sg"] = { builtin.live_grep, { desc = "[S]earch by [G]rep" } },
     ["<leader>sd"] = { builtin.diagnostics, { desc = "[S]earch [D]iagnostics" } },

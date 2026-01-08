@@ -19,7 +19,7 @@ local circles = require "circles"
 circles.setup { icons = { empty = "", filled = "", lsp_prefix = "" } }
 
 return {
-  enabled = true,
+  enabled = false,
   "nvim-tree/nvim-tree.lua",
   version = "*",
   lazy = false,

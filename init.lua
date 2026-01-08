@@ -171,3 +171,41 @@ vim.keymap.set("n", "<leader>tc", toggle_checkbox, {
   silent = true,
 })
 
+
+
+_G.save_token_to_file = function(response_body, jq_filter, file_path)
+  local output = vim.fn.system(
+    { "jq", "-r", jq_filter },
+    response_body
+  )
+
+  if vim.v.shell_error ~= 0 then
+    vim.notify(
+      "jq failed:\n" .. output,
+      vim.log.levels.ERROR
+    )
+    return false
+  end
+
+  output = vim.trim(output)
+
+  if output == "" or output == "null" then
+    vim.notify(
+      "Token is empty or null",
+      vim.log.levels.WARN
+    )
+    return false
+  end
+
+  vim.fn.writefile(
+    vim.split(output, "\n"),
+    file_path
+  )
+
+  vim.notify(
+    "Token saved to " .. file_path,
+    vim.log.levels.INFO
+  )
+
+  return true
+end

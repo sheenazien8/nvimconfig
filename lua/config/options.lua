@@ -28,6 +28,7 @@ vim.opt.cursorline = false
 vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 vim.opt.laststatus = 3
+vim.opt.showtabline = 1
 
 vim.opt.shiftwidth = 2
 vim.opt.smartindent = true
