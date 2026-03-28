@@ -12,6 +12,9 @@ return {
       lua = { "stylua" },
       php = { "pint" },
       blade = { "blade-formatter" },
+      sql = { "sql_formatter" },
+      mysql = { "sql_formatter" },
+      plsql = { "sql_formatter" },
     }
   },
 }

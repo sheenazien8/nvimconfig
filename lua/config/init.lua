@@ -13,7 +13,7 @@ tinker.setup {
 
 require("custom.auto_run_sh").setup()
 
-vim.cmd "colorscheme ayu"
+vim.cmd "colorscheme gruvbox"
 -- vim.cmd("colorscheme kanagawa")
 
 -- Make cursorline more vibrant

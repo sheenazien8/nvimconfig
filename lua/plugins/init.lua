@@ -149,5 +149,25 @@ return {
       vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
       vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
     end,
+  },
+  {
+    "sheenazien8/jq.nvim",
+    branch = "feat/range-support",
+    dependencies = {
+      -- https://github.com/nvim-lua/plenary.nvim
+      "nvim-lua/plenary.nvim",
+      -- https://github.com/MunifTanjim/nui.nvim
+      "MunifTanjim/nui.nvim",
+      -- https://github.com/grapp-dev/nui-components.nvim
+      "grapp-dev/nui-components.nvim",
+    },
+    config = function()
+      require("jq").setup()
+
+      -- Add visual mode command
+      vim.api.nvim_create_user_command('JqVisual', function()
+        require('jq').run_visual()
+      end, { range = true })
+    end
   }
 }

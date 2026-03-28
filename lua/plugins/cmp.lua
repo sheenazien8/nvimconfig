@@ -61,7 +61,7 @@ return {
               sources = cmp.config.sources({
                 -- { name = 'cmp_ai' },
                 -- { name = 'minuet' },
-                -- { name = "copilot" },
+                { name = "copilot" },
                 -- { name = "supermaven" },
                 -- { name = "codeium" },
               }),
@@ -78,6 +78,10 @@ return {
             fallback()
           end
         end, { "i", "s" }),
+        -- Select the [n]ext item
+        ["<Down>"] = cmp.mapping.select_next_item(),
+        -- Select the [p]revious item
+        ["<Up>"] = cmp.mapping.select_prev_item(),
         -- Select the [n]ext item
         ["<C-n>"] = cmp.mapping.select_next_item(),
         -- Select the [p]revious item
@@ -209,18 +213,18 @@ return {
         -- Check if any LSP client supports code actions before making the request
         local clients = vim.lsp.get_clients({ bufnr = 0 })
         local has_code_action_support = false
-        
+
         for _, client in pairs(clients) do
           if client.supports_method("textDocument/codeAction") then
             has_code_action_support = true
             break
           end
         end
-        
+
         if not has_code_action_support then
           return
         end
-        
+
         local context = { diagnostics = vim.diagnostic.get() }
         local params = lsp_util.make_range_params()
         params.context = context
