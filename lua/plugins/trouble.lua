@@ -1,5 +1,8 @@
+local env = require "config.env"
+
 return {
   "folke/trouble.nvim",
+  enabled = not env.is_server,
   opts = {}, -- for default options, refer to the configuration section for custom setup.
   cmd = "Trouble",
   keys = {

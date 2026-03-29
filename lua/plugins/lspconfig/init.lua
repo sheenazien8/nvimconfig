@@ -1,3 +1,5 @@
+local env = require "config.env"
+
 local M = {}
 
 -- Filter helper: only keep method & function symbols
@@ -53,6 +55,7 @@ end
 
 return {
   "neovim/nvim-lspconfig",
+  enabled = not env.is_server,
   dependencies = {
     { "j-hui/fidget.nvim", opts = {} },
     { "folke/neodev.nvim", opts = {} },

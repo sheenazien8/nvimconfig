@@ -1,7 +1,10 @@
+local env = require "config.env"
+
 return {
   "kevinhwang91/nvim-ufo",
   dependencies = "kevinhwang91/promise-async",
   event = "VeryLazy",
+  enabled = not env.is_server,
   config = function()
     vim.o.foldcolumn = "0" -- '0' is not bad
     vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

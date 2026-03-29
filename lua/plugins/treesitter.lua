@@ -1,5 +1,8 @@
+local env = require "config.env"
+
 return {
   "nvim-treesitter/nvim-treesitter",
+  enabled = not env.is_server,
   build = ":TSUpdate",
   dependencies = {
     "JoosepAlviste/nvim-ts-context-commentstring",

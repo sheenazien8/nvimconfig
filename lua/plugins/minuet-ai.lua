@@ -1,3 +1,5 @@
+local env = require "config.env"
+
 return {
   {
     'milanglacier/minuet-ai.nvim',

@@ -1,7 +1,9 @@
+local env = require "config.env"
+
 -- github copilot
 return {
   {
-    enabled = true,
+    enabled = not env.is_server,
     "zbirenbaum/copilot-cmp",
     config = function()
       require("copilot_cmp").setup()
@@ -10,7 +12,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    enabled = true,
+    enabled = not env.is_server,
     commit = "2b368ce",
     event = { "InsertEnter", "LspAttach" },
     fix_pairs = true,
