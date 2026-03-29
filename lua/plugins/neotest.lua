@@ -1,3 +1,5 @@
+local env = require "config.env"
+
 local function checkBinIsNeotest()
   local project_dir = vim.fn.getcwd()
   -- check if the file in ./vendor/bin/pest exists
@@ -27,6 +29,7 @@ end
 
 return {
   "nvim-neotest/neotest",
+  enabled = not env.is_server,
   dependencies = {
     "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",

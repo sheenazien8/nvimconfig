@@ -1,6 +1,9 @@
+local env = require "config.env"
+
 -- plugins for handling formatting code
 return {
   "stevearc/conform.nvim",
+  enabled = not env.is_server,
   opts = {
     notify_on_error = false,
     -- format_on_save = {

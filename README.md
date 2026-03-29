@@ -47,6 +47,59 @@ This configuration uses Lazy.nvim to manage plugins. Here are some of the key pl
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter): Treesitter configurations and abstraction layer for Neovim.
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): A highly extendable fuzzy finder over lists.
 
+### Environment Detection (Server/Minimal Mode)
+
+This configuration automatically detects when running on a server and disables heavy plugins to keep Neovim fast and responsive.
+
+#### Automatic Detection
+
+The config detects a server environment by checking:
+
+1. **Environment variables**: `NVIM_SERVER=1` or `NVIM_MINIMAL=1`
+2. **Hostname patterns**: `server`, `prod`, `staging`, `remote`, `ssh`, `vps`, `aws`, `digitalocean`, `linode`
+3. **SSH session**: Presence of `SSH_CONNECTION` or `SSH_CLIENT` environment variables
+
+#### Disabled Plugins in Server Mode
+
+When running in server/minimal mode, these plugins are automatically disabled:
+
+| Category | Plugins |
+|----------|----------|
+| **LSP** | nvim-lspconfig (all language servers) |
+| **Syntax** | nvim-treesitter |
+| **Completion** | nvim-cmp, copilot, LuaSnip |
+| **Formatting** | conform.nvim |
+| **AI** | codecompanion, minuet-ai |
+| **UI** | noice, trouble, ufo (folding), dropbar |
+| **Testing** | neotest |
+| **Framework** | flutter-tools |
+
+#### Manual Control
+
+**Force server mode:**
+```bash
+export NVIM_SERVER=1
+nvim
+# or
+export NVIM_MINIMAL=1
+nvim
+```
+
+**Force full mode on server:**
+```bash
+export NVIM_SERVER=0
+nvim
+```
+
+#### Per-Project Override
+
+Create a `.nvim.env` file in your project root:
+
+```bash
+# .nvim.env
+NVIM_SERVER=0  # Force full config for this project
+```
+
 ## Configuration Structure
 
 The configuration files are organized as follows:

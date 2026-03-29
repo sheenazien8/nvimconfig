@@ -1,16 +1,13 @@
+local env = require "config.env"
+
 return {
-  "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+  "tpope/vim-sleuth",
   "editorconfig/editorconfig-vim",
   "tpope/vim-fugitive",
-  { "wakatime/vim-wakatime", lazy = false },
+  { "wakatime/vim-wakatime", lazy = false, enabled = not env.is_server },
   {
     "jwalton512/vim-blade",
   },
-  -- {
-  --   "tpope/vim-dadbod",
-  --   "kristijanhusak/vim-dadbod-completion",
-  --   "kristijanhusak/vim-dadbod-ui",
-  -- },
   {
     "echasnovski/mini.bracketed",
     version = "*",
@@ -37,6 +34,7 @@ return {
     build = function()
       vim.fn["mkdp#util#install"]()
     end,
+    enabled = not env.is_server,
   },
   {
     "ccaglak/larago.nvim",
@@ -54,49 +52,37 @@ return {
     "jake-stewart/auto-cmdheight.nvim",
     lazy = false,
     opts = {
-      -- max cmdheight before displaying hit enter prompt.
       max_lines = 5,
-
-      -- number of seconds until the cmdheight can restore.
       duration = 2,
-
-      -- whether key press is required to restore cmdheight.
       remove_on_key = true,
-
-      -- always clear the cmdline after duration and key press.
-      -- by default it will only happen when cmdheight changed.
       clear_always = false,
     },
+    enabled = not env.is_server,
   },
   {
     "folke/persistence.nvim",
-    event = "BufReadPre", -- this will only start session saving when an actual file was opened
-    opts = {
-      -- add any custom options here
-    },
+    event = "BufReadPre",
+    opts = {},
+    enabled = not env.is_server,
   },
   {
     "nvim-zh/colorful-winsep.nvim",
     config = true,
     event = { "WinLeave" },
+    enabled = not env.is_server,
   },
-  -- {
-  --   "Wansmer/symbol-usage.nvim",
-  --   event = "BufReadPre", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
-  --   config = function()
-  --     require("symbol-usage").setup()
-  --   end,
-  -- },
   {
     "Wansmer/sibling-swap.nvim",
     dependencies = { "nvim-treesitter" },
     config = function()
       require("sibling-swap").setup {}
     end,
+    enabled = not env.is_server,
   },
   "ggandor/leap.nvim",
   {
-    'tjdevries/present.nvim'
+    "tjdevries/present.nvim",
+    enabled = not env.is_server,
   },
   {
     dir = "/Users/sheenazien8/Documents/Code/fun/rest.nvim",
@@ -106,17 +92,19 @@ return {
         opts.ensure_installed = opts.ensure_installed or {}
         table.insert(opts.ensure_installed, "http")
       end,
-    }
+    },
+    enabled = not env.is_server,
   },
   {
     "folke/todo-comments.nvim",
     event = "VimEnter",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = true },
+    enabled = not env.is_server,
   },
-  {                     -- Useful plugin to show you pending keybinds.
+  {
     "folke/which-key.nvim",
-    event = "VimEnter", -- Sets the loading event to 'VimEnter'
+    event = "VimEnter",
     enabled = true,
     opts = {
       preset = "modern",
@@ -125,20 +113,15 @@ return {
   },
   {
     "NvChad/nvim-colorizer.lua",
+    enabled = not env.is_server,
   },
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
-    -- optionally, override the default options:
     config = true,
-    -- config = function()
-    -- 	require("tailwindcss-colorizer-cmp").setup({
-    -- 		color_square_width = 2,
-    -- 	})
-    -- end,
+    enabled = not env.is_server,
   },
   {
     "Bekaboo/dropbar.nvim",
-    -- optional, but required for fuzzy finder support
     dependencies = {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
@@ -149,25 +132,22 @@ return {
       vim.keymap.set("n", "[;", dropbar_api.goto_context_start, { desc = "Go to start of current context" })
       vim.keymap.set("n", "];", dropbar_api.select_next_context, { desc = "Select next context" })
     end,
+    enabled = not env.is_server,
   },
   {
     "sheenazien8/jq.nvim",
     branch = "feat/range-support",
     dependencies = {
-      -- https://github.com/nvim-lua/plenary.nvim
       "nvim-lua/plenary.nvim",
-      -- https://github.com/MunifTanjim/nui.nvim
       "MunifTanjim/nui.nvim",
-      -- https://github.com/grapp-dev/nui-components.nvim
       "grapp-dev/nui-components.nvim",
     },
     config = function()
       require("jq").setup()
-
-      -- Add visual mode command
-      vim.api.nvim_create_user_command('JqVisual', function()
-        require('jq').run_visual()
+      vim.api.nvim_create_user_command("JqVisual", function()
+        require("jq").run_visual()
       end, { range = true })
-    end
-  }
+    end,
+    enabled = not env.is_server,
+  },
 }

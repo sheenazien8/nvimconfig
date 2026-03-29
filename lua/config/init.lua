@@ -3,15 +3,19 @@ require "config.lazy"
 require "custom.statusline"
 -- require "config.keymaps.init"
 
-local tinker = require "custom.tinker"
+local env = require "config.env"
 
-tinker.setup {
-  split_direction = "horizontal", -- or "horizontal"
-  split_size = 20,                -- width or height of the split
-  file_to_watch = "tinker.php",   -- file to watch for changes
-}
+if not env.is_server then
+  local tinker = require "custom.tinker"
 
-require("custom.auto_run_sh").setup()
+  tinker.setup {
+    split_direction = "horizontal", -- or "horizontal"
+    split_size = 20,                -- width or height of the split
+    file_to_watch = "tinker.php",   -- file to watch for changes
+  }
+
+  require("custom.auto_run_sh").setup()
+end
 
 vim.cmd "colorscheme gruvbox"
 -- vim.cmd("colorscheme kanagawa")

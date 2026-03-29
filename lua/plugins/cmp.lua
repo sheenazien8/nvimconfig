@@ -1,6 +1,9 @@
+local env = require "config.env"
+
 -- plugin for handling completion
 return {
   "hrsh7th/nvim-cmp",
+  enabled = not env.is_server,
   event = "InsertEnter",
   dependencies = {
     {
