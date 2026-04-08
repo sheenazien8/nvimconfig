@@ -174,6 +174,18 @@ return {
       },
     }
 
+    cmp.register_source("at_file", require("custom.cmp-at-file").new())
+
+    cmp.setup.filetype("markdown", {
+      sources = cmp.config.sources({
+        { name = "at_file" },
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "path" },
+        { name = "buffer" },
+      }),
+    })
+
     cmp.setup.filetype({ "mysql", "sql" }, {
       sources = {
         { name = "vim-dadbod-completion" },
