@@ -3,7 +3,7 @@ local env = require "config.env"
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
-  enabled = not env.is_server,
+  enabled = false,
   opts = {
     presets = {
       bottom_search = false,        -- use a classic bottom cmdline for search

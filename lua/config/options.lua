@@ -40,7 +40,7 @@ vim.opt.swapfile = false
 
 
 -- LSP configuration to suppress method not supported warnings
-vim.lsp.set_log_level("off")
+-- vim.lsp.set_log_level("off")
 vim.diagnostic.config({
   virtual_text = true,
   signs = true,

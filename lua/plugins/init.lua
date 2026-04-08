@@ -79,7 +79,9 @@ return {
     end,
     enabled = not env.is_server,
   },
-  "ggandor/leap.nvim",
+  {
+    url = "https://codeberg.org/andyg/leap.nvim"
+  },
   {
     "tjdevries/present.nvim",
     enabled = not env.is_server,
