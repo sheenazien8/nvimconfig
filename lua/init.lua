@@ -123,6 +123,11 @@ vim.api.nvim_create_user_command("CopyPathWithLines", function(opts)
 end, { range = true })
 
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'go', 'php', 'blade', 'lua', 'tsx', 'json', 'html', 'md', 'vim', 'vimdoc' },
+  callback = function() vim.treesitter.start() end,
+})
+
 local function is_array(t)
   if type(t) ~= "table" then return false end
   local i = 0

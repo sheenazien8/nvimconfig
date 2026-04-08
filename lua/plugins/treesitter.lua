@@ -5,8 +5,8 @@ return {
   enabled = not env.is_server,
   build = ":TSUpdate",
   dependencies = {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    -- "JoosepAlviste/nvim-ts-context-commentstring",
+    -- "nvim-treesitter/nvim-treesitter-textobjects",
   },
   opts = {
     ensure_installed = {
@@ -14,7 +14,6 @@ return {
       "c",
       "html",
       "lua",
-      "markdown",
       "vim",
       "vimdoc",
       "php_only",
@@ -26,7 +25,6 @@ return {
       "blade",
     },
     -- Autoinstall languages that are not installed
-    auto_install = true,
     highlight = { enable = true, additional_vim_regex_highliting = true },
     indent = { enable = true },
     textobjects = {
@@ -48,6 +46,6 @@ return {
     },
   },
   config = function (_, opts)
-    require("nvim-treesitter.configs").setup (opts)
+    require("nvim-treesitter").setup (opts)
   end
 }
