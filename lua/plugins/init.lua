@@ -87,7 +87,7 @@ return {
     enabled = not env.is_server,
   },
   {
-    dir = "/Users/sheenazien8/Documents/Code/fun/rest.nvim",
+   "rest-nvim/rest.nvim",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       opts = function(_, opts)

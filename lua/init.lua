@@ -1,4 +1,5 @@
 require "config"
+require("custom.at-file-highlight").setup()
 local json_collection = require "json_collection"
 
 vim.filetype.add {
@@ -90,7 +91,6 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 })
 
 vim.api.nvim_create_user_command("CopyProjectPath", function()
-  local cwd = vim.fn.getcwd()
   local file = vim.fn.expand("%:p")
   local relative = vim.fn.fnamemodify(file, ":.") -- makes it relative to cwd
 
@@ -124,7 +124,7 @@ end, { range = true })
 
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'go', 'php', 'blade', 'lua', 'tsx', 'json', 'html', 'md', 'vim', 'vimdoc' },
+  pattern = { 'go', 'php', 'blade', 'lua', 'tsx', 'json', 'html', 'md', 'vim', 'vimdoc', 'http', "yaml", "toml", "css", "js"},
   callback = function() vim.treesitter.start() end,
 })
 
