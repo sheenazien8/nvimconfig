@@ -1,0 +1,8 @@
+-- vim.lsp.config['phpantom'] = {
+-- }
+-- vim.lsp.enable('phpantom')
+return {
+  cmd = { '/Users/sheenazien8/.local/bin/phpantom_lsp' },
+  filetypes = { 'php' },
+  root_markers = { 'composer.json', '.git' },
+}

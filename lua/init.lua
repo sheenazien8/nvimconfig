@@ -75,20 +75,9 @@ vim.api.nvim_create_autocmd("FileType", {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd("VimResized", {
-  command = "wincmd ="
-})
-
-vim.api.nvim_create_autocmd("QuickFixCmdPost", {
-  pattern = { "*" },
-  callback = function()
-    -- If quickfix list is empty, don't open
-    local qf = vim.fn.getqflist()
-    if qf and #qf > 0 then
-      vim.cmd("botright copen 5")
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd("VimResized", {
+--   command = "wincmd ="
+-- })
 
 vim.api.nvim_create_user_command("CopyProjectPath", function()
   local file = vim.fn.expand("%:p")
@@ -122,11 +111,6 @@ vim.api.nvim_create_user_command("CopyPathWithLines", function(opts)
   print("Copied: " .. result)
 end, { range = true })
 
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'go', 'php', 'blade', 'lua', 'tsx', 'json', 'html', 'md', 'vim', 'vimdoc', 'http', "yaml", "toml", "css", "js"},
-  callback = function() vim.treesitter.start() end,
-})
 
 local function is_array(t)
   if type(t) ~= "table" then return false end

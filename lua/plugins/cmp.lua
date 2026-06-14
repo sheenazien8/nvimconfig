@@ -29,6 +29,7 @@ return {
     local cmp = require "cmp"
     local luasnip = require "luasnip"
     require("luasnip/loaders/from_snipmate").lazy_load()
+    require("luasnip/loaders/from_lua").lazy_load()
     luasnip.config.setup {}
     local has_words_before = function()
       if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then

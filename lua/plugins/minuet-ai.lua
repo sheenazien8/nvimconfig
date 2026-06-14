@@ -15,5 +15,5 @@ return {
   -- required.
   { 'hrsh7th/nvim-cmp' },
   -- optional, if you are using virtual-text frontend, blink is not required.
-  { 'Saghen/blink.cmp' },
+  -- { 'Saghen/blink.cmp' },
 }

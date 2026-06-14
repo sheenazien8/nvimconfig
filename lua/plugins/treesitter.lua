@@ -41,11 +41,22 @@ return {
     playground = {
       enable = true,
       disable = {},
-      updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+      updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
       persist_queries = false, -- Whether the query persists across vim sessions
     },
   },
-  config = function (_, opts)
-    require("nvim-treesitter").setup (opts)
+  config = function(_, opts)
+    require("nvim-treesitter").setup(opts)
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = '*',
+      callback = function()
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
+
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = { 'go', 'php', 'blade', 'lua', 'javascriptreact', 'typescriptreact', 'json', 'html', 'md', 'vim', 'vimdoc', 'http', "yaml", "toml", "css", "js", "ts", "typescript", "dart", "kt" },
+      callback = function() vim.treesitter.start() end,
+    })
   end
 }

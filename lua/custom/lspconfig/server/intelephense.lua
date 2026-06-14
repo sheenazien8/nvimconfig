@@ -2,7 +2,7 @@ return {
   -- on_attach = require 'virtualtypes'.on_attach,
   filetypes = { "php", "blade" },
   init_options = {
-    licenceKey = "REDACTED",
+    licenceKey = os.getenv("INTELEPHENSE_LICENSE_KEY"),
   },
   settings = {
     intelephense = {

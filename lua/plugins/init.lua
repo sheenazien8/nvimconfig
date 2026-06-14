@@ -87,7 +87,7 @@ return {
     enabled = not env.is_server,
   },
   {
-   "rest-nvim/rest.nvim",
+    dir = "/Users/sheenazien8/Documents/Code/fun/rest.nvim",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       opts = function(_, opts)
@@ -136,6 +136,7 @@ return {
     end,
     enabled = not env.is_server,
   },
+  'barrettruth/diffs.nvim',
   {
     "sheenazien8/jq.nvim",
     branch = "feat/range-support",

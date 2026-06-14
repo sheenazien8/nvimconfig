@@ -98,6 +98,33 @@ local function macro_recording()
   return ""
 end
 
+local function token_count()
+  if vim.bo.filetype ~= "markdown" then
+    return ""
+  end
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local chars = 0
+  for _, line in ipairs(lines) do
+    chars = chars + #line
+  end
+  local tokens = math.floor(chars / 4)
+  local label
+  if tokens >= 1000 then
+    label = string.format("~%.1fk", tokens / 1000)
+  else
+    label = string.format("~%d", tokens)
+  end
+  local hl
+  if tokens < 10000 then
+    hl = "StatusLineTokGreen"
+  elseif tokens < 50000 then
+    hl = "StatusLineTokYellow"
+  else
+    hl = "StatusLineTokRed"
+  end
+  return "%#" .. hl .. "#" .. label .. " tok%*"
+end
+
 local function root_name()
   local cwd = vim.fn.getcwd()
   local last_dir = vim.fn.fnamemodify(cwd, ":t")
@@ -157,6 +184,8 @@ function _G.statusline()
     " ",
     safe_call(root_name, ""),
     " ",
+    safe_call(token_count, ""),
+    " ",
     safe_call(linecol, "0:0"),
     " ",
     safe_call(percentage, "0%"),
@@ -170,3 +199,6 @@ vim.o.statusline = "%!v:lua.statusline()"
 -- Set highlight groups for statusline using Lua API
 vim.api.nvim_set_hl(0, "StatusLine", { bg = colors.bg, fg = colors.fg })
 vim.api.nvim_set_hl(0, "StatusLineAccent", { bg = colors.bg, fg = colors.blue })
+vim.api.nvim_set_hl(0, "StatusLineTokGreen", { bg = colors.bg, fg = colors.green })
+vim.api.nvim_set_hl(0, "StatusLineTokYellow", { bg = colors.bg, fg = colors.yellow })
+vim.api.nvim_set_hl(0, "StatusLineTokRed", { bg = colors.bg, fg = colors.red })

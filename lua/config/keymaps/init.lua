@@ -25,6 +25,11 @@ return {
     ["<leader>tc"] = { "<cmd>tabnew<CR>", { desc = "Create new tab" } },
     ["-"] = { "<CMD>Oil<CR>", { desc = "Oil" } },
     ["<leader>te"] = { "<CMD>Telescope rest select_env<CR>", { desc = "Select env", pattern = { "http" } } },
+    ["<leader>y"] = { '"+y', { desc = "Yank to system clipboard" } },
+    ["<leader>yy"] = { '"+yy', { desc = "Yank line to system clipboard" } },
+  },
+  v = {
+    ["<leader>y"] = { '"+y', { desc = "Yank selection to system clipboard" } },
   },
   t = {
     ["<Esc><Esc>"] = { "<C-\\><C-n>", { desc = "Exit terminal mode" } },
